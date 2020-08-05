@@ -1,0 +1,130 @@
+body{
+    margin: 0
+}
+
+body.showSlider .sliderContainer{
+    display: block;
+}
+
+#mainPopup {
+    padding: 10px;
+    height: 200px;
+    width: 400px;
+    font-family: Helvetica, Ubuntu, Arial, sans-serif;
+    background-color: whitesmoke;
+    border-radius: 5px;
+    text-align: center;
+}
+
+/* Slider labels */
+#speedLabels{
+
+    display: flex;
+    justify-content: space-between;
+    margin: 0 20px 0 12.5px;
+}
+
+#speedLabels > div {
+    width: 1px;
+}
+
+#speedLabels .active{
+    color: #F97E10;
+}
+
+/* Slider Container */
+.sliderContainer{
+    margin-top: 20px;
+    display: none;
+}
+.noVidWarning{
+    display: none;
+    margin-top: 20px;
+}
+
+.noVideo .noVidWarning{
+    display: block;
+}
+
+/* Slider */
+.slider {
+    -webkit-appearance: none;
+    width: 100%;
+    height: 12.5px;
+    margin: 10px 0;
+    background: #d3d3d3;
+    outline: none;
+    opacity: 0.7;
+    -webkit-transition: .2s;
+    transition: opacity .2s;
+}
+
+.slider:hover {
+    opacity: 1;
+}
+
+.slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 25px;
+    height: 25px;
+    background: #F97E10;
+    cursor: pointer;
+    border-radius: 25px;
+}
+
+/* TOGGLE SWITCH */
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 34px;
+}
+
+.switch input { 
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.toggle {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    -webkit-transition: .4s;
+    transition: .4s;
+    border-radius: 34px;
+
+}
+
+.toggle:before {
+    position: absolute;
+    content: "";
+    height: 26px;
+    width: 26px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    -webkit-transition: .4s;
+    transition: .4s;
+    border-radius: 50%;
+}
+
+input:checked + .toggle {
+    background-color: #F97E10;
+}
+
+input:focus + .toggle {
+    box-shadow: 0 0 1px #F97E10;
+}
+
+input:checked + .toggle:before {
+    -webkit-transform: translateX(26px);
+    -ms-transform: translateX(26px);
+    transform: translateX(26px);
+}
