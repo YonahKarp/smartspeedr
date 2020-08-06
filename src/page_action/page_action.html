@@ -2,30 +2,39 @@
 <link rel="stylesheet" type="text/css" href="./page_action.css">
 
 <div id="mainPopup">
-	<div class="midAlign">
-		<h2>Activate Smartspeedr</h2>
-		<label class="switch">
-			<input type="checkbox" id="activate">
-			<span class="toggle round"></span>
-		</label>
-	</div>
-	<div class="sliderContainer">
-		<div id="speedLabels">
-			<div>1x</div>
-			<div>+</div>
-			<div>+</div>
-			<div>+</div>
-			<div>+</div>
-			<div>+</div>
-			<div>2x</div>
-			<div>+</div>
-			<div>3x</div>
+	<div class="padding10">
+		<div class="midAlign">
+			<h2>Activate Smartspeedr</h2>
+			<label class="switch">
+				<input type="checkbox" id="activate">
+				<span class="toggle round"></span>
+			</label>
 		</div>
-		<input type="range" min="0" max="8" value="0" class="slider" id="speedSlidr">
+		<div class="sliderContainer">
+			<div class="currRate">
+				current rate: <span id="rate">1</span>
+			</div>
+			<div id="speedLabels">
+				<div>1x</div>
+				<div>+</div>
+				<div>+</div>
+				<div>+</div>
+				<div>+</div>
+				<div>+</div>
+				<div>2x</div>
+				<div>+</div>
+				<div>3x</div>
+			</div>
+			<input type="range" min="0" max="8" value="0" class="slider" id="speedSlidr">
 
+		</div>
+		<div class="noVidWarning">
+			No media content was found on the webpage :(
+		</div>
 	</div>
-	<div class="noVidWarning">
-		No media content was found on the webpage :(
+	<div class="multipleMediaSelect">
+		<h3 class="padding10">Mulpitle media sources were found. Select the target media source below</h3>
+		<div id="mediaList"></div>
 	</div>
 </div>
 

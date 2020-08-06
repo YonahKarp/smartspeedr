@@ -1,5 +1,6 @@
 body{
-    margin: 0
+    margin: 0;
+    background-color: whitesmoke;
 }
 
 body.showSlider .sliderContainer{
@@ -7,13 +8,15 @@ body.showSlider .sliderContainer{
 }
 
 #mainPopup {
-    padding: 10px;
     height: 200px;
     width: 400px;
     font-family: Helvetica, Ubuntu, Arial, sans-serif;
-    background-color: whitesmoke;
     border-radius: 5px;
     text-align: center;
+}
+
+.padding10{
+    padding: 10px;
 }
 
 /* Slider labels */
@@ -43,6 +46,34 @@ body.showSlider .sliderContainer{
 }
 
 .noVideo .noVidWarning{
+    display: block;
+}
+
+.multipleMediaSelect{
+    display: none;
+}
+
+.mutipleMedia .multipleMediaSelect{
+    display: block;
+}
+
+
+.mediaElement{
+    padding: 10px;
+    margin: 10px 0;
+    text-align: center;
+    background-color: white;
+
+}
+
+.mediaLabel{
+    margin-top: 5px;
+}
+
+.posterImg{
+    width: 40%;
+    max-height: 200px;
+    margin: 0 auto;
     display: block;
 }
 
