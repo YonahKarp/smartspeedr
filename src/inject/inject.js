@@ -78,13 +78,12 @@ function initialSetup(active){
 function checkContextAndStart(){
 
 	if(contextObj[media.src] && contextObj[media.src].state == "running") {
-		startAnalyzer()
+		startAnalyzer();
 		return
 	}
 
-	createAudioContext(media)
-
-		startAnalyzer()
+	createAudioContext(media);
+	startAnalyzer();
 }
 
 //TO:DO fix occasional video burnout
@@ -113,10 +112,21 @@ function startAnalyzer(){
 
 	media.onpause = function(){	console.log("onPause");	clearInterval(intervalId)}
 	media.onended = function(){console.log("onEnded");	clearInterval(intervalId)}
+	media.onstalled = function(){console.log('stalled')}
+	media.onwaiting = function(){
+		console.log('waiting');
+		clearInterval(intervalId);
+		media.ontimeupdate = function(){
+			console.log('timeupdate');
+			clearInterval(intervalId);
+			intervalId = setInterval(analyseDbLevels, 100);
+			media.ontimeupdate = null
+		}
+	}
 
-	media.onplay = function(){
+	media.onplaying = function(){
+		console.log("onPlaying")
 		clearInterval(intervalId)
-		console.log("onPlay")
 		intervalId = setInterval(analyseDbLevels, 100)
 	}
 }
@@ -154,16 +164,6 @@ function sendMediaList(){
 	chrome.extension.sendMessage({type: 'multipleMedia', mediaList}, function(response) {})
 }
 
-document.addEventListener('canplay',function(e){
-	console.log("new media added to page")
-
-	if(settings.get('active') && (!media || !media.parentNode)){
-		console.log('running initial setup onload')
-
-		initialSetup(true)
-	}
-},true);
-
 function overlaySVG(el){
 	removeOverlay();
 
@@ -184,6 +184,13 @@ function removeOverlay(){
 	if(overlayNode && overlayNode.parentNode)
 		document.body.removeChild(overlayNode)
 }
+
+document.addEventListener('loadeddata',function(e){
+
+	if(settings.get('active') && (!media || !media.parentNode)){
+		initialSetup(true)
+	}
+},true);
 
 function teardown(){
 	clearInterval(intervalId);
