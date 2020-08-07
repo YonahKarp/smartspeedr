@@ -7,21 +7,20 @@ let rate = document.getElementById('rate')
 let valMap = [1.1, 1.15, 1.2, 1.4, 1.6, 1.8, 2, 2.5, 3]
 let bgPage = chrome.extension.getBackgroundPage();
 
-
-//reinstate
-activateSwitch.checked = bgPage.state.activated
-slider.value = valMap.indexOf(bgPage.state.baseSpeed);
-rate.innerHTML = bgPage.state.baseSpeed || 1;
-
-if(bgPage.state.activated){
-    if(!bgPage.state.video)
-        document.body.classList.add('noVideo')
-    else
-        document.body.classList.add('showSlider')
+//get back page's previous state
+let msg = {
+    type: 'popupOpened'
 }
+sendMessageToInject(msg, function(response){
+    activateSwitch.checked = response.active
+    slider.value = response.baseSpeed ? valMap.indexOf(response.baseSpeed) : 0;
+    rate.innerHTML = setRate(response.baseSpeed || 1);
+
+    if(response.active)
+        document.body.classList.add('showSlider')
+})
 
 
-//TO:DO fix slider
 slider.addEventListener("input", function(e) {
     let value = e.target.value
     for(element of labels.children) {
@@ -35,7 +34,7 @@ slider.addEventListener("input", function(e) {
         value: valMap[value]
     }
 
-    rate.innerHTML = valMap[value];
+    rate.innerHTML = setRate(valMap[value]);
 
     chrome.extension.sendMessage(message, function(response) {})
     sendMessageToInject(message)
@@ -58,9 +57,6 @@ activateSwitch.addEventListener('change', function(e){
     sendMessageToInject(message)
 })
 
-function test(e){
-    console.log(e)
-}
 
 chrome.extension.onMessage.addListener(
     function(request, sender, sendResponse) {
@@ -77,7 +73,7 @@ chrome.extension.onMessage.addListener(
                 createMediaList(request)
                 break;
             case 'newRate':
-                rate.innerHTML = request.value
+                rate.innerHTML = setRate(request.value)
                 break;
             default:
                 ;
@@ -89,11 +85,14 @@ chrome.extension.onMessage.addListener(
 
 function createMediaList(request){
     mediaList.innerHTML = ''
-    request.mediaList.forEach(el => {
-         let mediaElement = document.createElement("div")
-         mediaElement.classList.add('mediaElement')
+    request.mediaList.forEach((el,i) => {
+         let mediaElement = document.createElement("div");
+
+         mediaElement.classList.add('mediaElement');
+         if(i == 0)
+             mediaElement.classList.add('active');
+
          mediaElement.onmouseenter = function(ev){
-             console.log("over ", el.index)
              let message = {
                  type: 'mediaOver',
                  value: el.index
@@ -102,12 +101,27 @@ function createMediaList(request){
              sendMessageToInject(message)
          }
          mediaElement.onmouseleave = function(ev){
-            console.log("n`out ", el.index)
 
             let message = {
                 type: 'mediaOut',
                 value: el.index
             }
+
+            sendMessageToInject(message)
+        }
+
+        mediaElement.onclick = function(ev){
+
+            let message = {
+                type: 'mediaSelect',
+                value: el.index
+            }
+
+            for(el of mediaList.children) {
+                el.classList.remove('active')
+            };
+
+            mediaElement.classList.add('active')
 
             sendMessageToInject(message)
         }
@@ -122,8 +136,12 @@ function createMediaList(request){
     })
 }
 
-function sendMessageToInject(message){
+function setRate(value){
+    return (+value).toPrecision(3)
+}
+
+function sendMessageToInject(message, callback = function(){}){
     chrome.tabs.query({active: true, currentWindow: true}, function(tabs){
-        chrome.tabs.sendMessage(tabs[0].id, message, function(response) {});  
+        chrome.tabs.sendMessage(tabs[0].id, message, callback);  
     })
 }

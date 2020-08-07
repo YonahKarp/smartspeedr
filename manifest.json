@@ -28,6 +28,8 @@
         "<all_urls>"
       ],
       "js": [
+        "src/inject/others.js",
+        "src/inject/store.js",
         "src/inject/inject.js"
       ]
     }
