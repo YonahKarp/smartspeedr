@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "manifest_version": 2,
   "description": "An overcast-like smart speed for web media",
-  "homepage_url": "http://extensionizr.com",
+  "homepage_url": "https://github.com/YonahKarp/smartspeedr",
   "icons": {
     "16": "icons/icon16.png",
     "48": "icons/icon48.png",
@@ -12,11 +12,11 @@
   "default_locale": "en",
   "background": {
     "scripts": [
+      "src/options_custom/lib/store.js",
       "src/bg/background.js"
     ],
     "persistent": true
   },
-  "options_page": "src/options_custom/index.html",
   "page_action": {
     "default_icon": "icons/icon19.png",
     "default_title": "page action demo",

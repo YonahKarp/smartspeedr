@@ -86,10 +86,14 @@ function checkContextAndStart(){
 	startAnalyzer();
 }
 
-//TO:DO fix occasional video burnout
 function createAudioContext(media){
 	let context = new AudioContext();
-	let src = context.createMediaElementSource(media);
+	let src;
+	try{
+		src = context.createMediaElementSource(media);
+	} catch(e){
+		return
+	}
 
 	contextObj[media.src] = context;
 
@@ -110,14 +114,12 @@ function startAnalyzer(){
 	if(media.isPlaying)
 		intervalId = setInterval(analyseDbLevels, 100)
 
-	media.onpause = function(){	console.log("onPause");	clearInterval(intervalId)}
-	media.onended = function(){console.log("onEnded");	clearInterval(intervalId)}
-	media.onstalled = function(){console.log('stalled')}
+	media.onpause = function(){	clearInterval(intervalId)}
+	media.onended = function(){clearInterval(intervalId)}
+	media.onstalled = function(){}
 	media.onwaiting = function(){
-		console.log('waiting');
 		clearInterval(intervalId);
 		media.ontimeupdate = function(){
-			console.log('timeupdate');
 			clearInterval(intervalId);
 			intervalId = setInterval(analyseDbLevels, 100);
 			media.ontimeupdate = null
@@ -125,13 +127,17 @@ function startAnalyzer(){
 	}
 
 	media.onplaying = function(){
-		console.log("onPlaying")
 		clearInterval(intervalId)
 		intervalId = setInterval(analyseDbLevels, 100)
 	}
 }
 
 function analyseDbLevels(){
+	if(!media){
+		clearInterval(intervalId);
+		return;
+	}
+
 	analyser.getByteFrequencyData(dataArray)
 
 	let volumeMultiplier = media.muted ? 0 : media.volume
@@ -139,13 +145,14 @@ function analyseDbLevels(){
 	let silenceThreshold = 90*volumeMultiplier
 	let slicedArray = dataArray.slice(3)
 	let peak = Math.max(...slicedArray)
+	let newRate = basePlaybackRate
 
 	if(peak < silenceThreshold){
-		let k = 0.02 * ((3.2 - basePlaybackRate)/2);
-		let newRate = basePlaybackRate + Math.min( (silenceThreshold - peak)*k, 1);
+		let k = 0.02;
+		newRate = basePlaybackRate + Math.min( (silenceThreshold - peak)*k, 1);
 		media.playbackRate = newRate
 		console.log("newRate: ", newRate)
-		chrome.extension.sendMessage({type: 'newRate', value: newRate}, function(response) {})
+		chrome.extension.sendMessage({type: 'newRate', value: newRate, basePlaybackRate}, function(response) {})
 	}else{
 		if(media.playbackRate != basePlaybackRate){
 			media.playbackRate = basePlaybackRate
@@ -199,6 +206,9 @@ function teardown(){
 		media.onplay = null;
 		media.onpause = null;
 		media.onended = null;
+		media.ontimeupdate = null;
+		media.onwaiting = null;
+
 		media = null;
 	}
 }

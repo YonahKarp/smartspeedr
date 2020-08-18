@@ -2,41 +2,52 @@
 <link rel="stylesheet" type="text/css" href="./page_action.css">
 
 <div id="mainPopup">
-	<div class="padding10">
-		<div class="midAlign">
-			<h2>Activate Smartspeedr</h2>
-			<label class="switch">
-				<input type="checkbox" id="activate">
-				<span class="toggle round"></span>
-			</label>
+	<div id="mainContent">
+		<div class="padding10">
+			<div class="midAlign">
+				<h2>Activate Smartspeedr</h2>
+				<label class="switch">
+					<input type="checkbox" id="activate">
+					<span class="toggle round"></span>
+				</label>
+			</div>
+			<div class="sliderContainer">
+				<div class="currRate">
+					current rate: <span id="rate">1</span>
+				</div>
+				<div id="speedLabels">
+					<div>1x</div>
+					<div>+</div>
+					<div>+</div>
+					<div>+</div>
+					<div>+</div>
+					<div>+</div>
+					<div>2x</div>
+					<div>+</div>
+					<div>3x</div>
+				</div>
+				<div>
+					<input type="range" min="0" max="8" value="0" class="slider" id="speedSlidr">
+				</div>
+			</div>
+			<div class="noVidWarning">
+				No media content was found on the webpage :(
+			</div>
 		</div>
-		<div class="sliderContainer">
-			<div class="currRate">
-				current rate: <span id="rate">1</span>
-			</div>
-			<div id="speedLabels">
-				<div>1x</div>
-				<div>+</div>
-				<div>+</div>
-				<div>+</div>
-				<div>+</div>
-				<div>+</div>
-				<div>2x</div>
-				<div>+</div>
-				<div>3x</div>
-			</div>
-			<div>
-				<input type="range" min="0" max="8" value="0" class="slider" id="speedSlidr">
-			</div>
-		</div>
-		<div class="noVidWarning">
-			No media content was found on the webpage :(
+		<div class="multipleMediaSelect">
+			<h3 class="padding10">Mulpitle media sources were found. Select the target media source below</h3>
+			<div id="mediaList"></div>
 		</div>
 	</div>
-	<div class="multipleMediaSelect">
-		<h3 class="padding10">Mulpitle media sources were found. Select the target media source below</h3>
-		<div id="mediaList"></div>
-	</div>
+
+	<!-- <div id="expired">
+		<h3>Your Trial has expired</h3>
+		<div class="expiredDesc">
+			<p>To continue enjoying Smartspeedr, please purchase the full version</p>
+			<p>If you have purchased the full version, simply connect to the account you purchased with below</p>
+		</div>
+		<div id='authButton'>Connect App</div>
+	</div> -->
 </div>
 
 <script src="./page_action.js"></script>

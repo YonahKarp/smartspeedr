@@ -7,6 +7,39 @@ let rate = document.getElementById('rate')
 let valMap = [1.1, 1.15, 1.2, 1.4, 1.6, 1.8, 2, 2.5, 3]
 let bgPage = chrome.extension.getBackgroundPage();
 
+// let status = bgPage.getLicenseStatus()
+
+// if(status == "EXPIRED" || true){
+//     document.body.className = '';
+//     document.body.classList.add('expired')
+// }
+    
+
+chrome.extension.onMessage.addListener(
+    function(request, sender, sendResponse) {
+        console.log('page_action recieve message: ', request)
+
+        switch(request.type){
+            case 'noVideo':
+                document.body.className = '';
+                document.body.classList.add('noVideo')
+                break;
+            case 'multipleMedia':
+                document.body.className = '';
+                document.body.classList.add('mutipleMedia')
+                createMediaList(request)
+                break;
+            case 'newRate':
+                rate.innerHTML = setRate(request.value)
+                break;
+            default:
+                ;
+        }
+
+        sendResponse()
+    }
+);
+
 //get back page's previous state
 let msg = {
     type: 'popupOpened'
@@ -56,32 +89,6 @@ activateSwitch.addEventListener('change', function(e){
     chrome.extension.sendMessage(message, function(response) {})
     sendMessageToInject(message)
 })
-
-
-chrome.extension.onMessage.addListener(
-    function(request, sender, sendResponse) {
-        console.log('page_action recieve message: ', request)
-
-        switch(request.type){
-            case 'noVideo':
-                document.body.className = '';
-                document.body.classList.add('noVideo')
-                break;
-            case 'multipleMedia':
-                document.body.className = '';
-                document.body.classList.add('mutipleMedia')
-                createMediaList(request)
-                break;
-            case 'newRate':
-                rate.innerHTML = setRate(request.value)
-                break;
-            default:
-                ;
-        }
-
-        sendResponse()
-    }
-);
 
 function createMediaList(request){
     mediaList.innerHTML = ''
@@ -145,3 +152,14 @@ function sendMessageToInject(message, callback = function(){}){
         chrome.tabs.sendMessage(tabs[0].id, message, callback);  
     })
 }
+
+//authorization
+// let authButton = document.getElementById('authButton');
+
+// authButton.addEventListener('click', function(e){
+//     e.target.classList.add('disable')
+//     bgPage.getLicense(function(licenseStatus){
+//         console.log(licenseStatus)
+//     })
+// })
+
