@@ -17,7 +17,6 @@ let bgPage = chrome.extension.getBackgroundPage();
 
 chrome.extension.onMessage.addListener(
     function(request, sender, sendResponse) {
-        console.log('page_action recieve message: ', request)
 
         switch(request.type){
             case 'noVideo':

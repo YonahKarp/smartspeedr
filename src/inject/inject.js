@@ -52,13 +52,15 @@ chrome.runtime.onMessage.addListener(
 				checkContextAndStart()
 				break;
 			default:
-				console.log('no action defined for message type')
+				break
+				// console.log('no action defined for message type')
 		}
 	}
 );
 
 function initialSetup(active){
 	mediaNodeList = document.querySelectorAll('video, audio');
+	mediaNodeList = [...mediaNodeList].filter(e => e.src)
 
 	if(mediaNodeList.length == 0){
 		chrome.extension.sendMessage({type: 'noVideo', video: false}, function(response) {})
@@ -151,7 +153,6 @@ function analyseDbLevels(){
 		let k = 0.02;
 		newRate = basePlaybackRate + Math.min( (silenceThreshold - peak)*k, 1);
 		media.playbackRate = newRate
-		console.log("newRate: ", newRate)
 		chrome.extension.sendMessage({type: 'newRate', value: newRate, basePlaybackRate}, function(response) {})
 	}else{
 		if(media.playbackRate != basePlaybackRate){
