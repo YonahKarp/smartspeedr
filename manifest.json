@@ -1,6 +1,6 @@
 {
   "name": "SmartSpeedr",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "manifest_version": 2,
   "description": "An overcast-like smart speed for web media",
   "homepage_url": "https://github.com/YonahKarp/smartspeedr",
